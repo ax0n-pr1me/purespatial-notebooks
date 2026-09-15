@@ -2,6 +2,8 @@
 
 The notebooks behind [purespatial.com](https://purespatial.com): open tools on open wildfire and terrain data, one folder per post, each with a result checked against something the model did not see.
 
+Working here as the author: `docs/author-guide.md`.
+
 ## One post, one folder
 
 ```
@@ -12,6 +14,7 @@ The notebooks behind [purespatial.com](https://purespatial.com): open tools on o
   notebook.py        the analysis, jupytext percent format; the source of truth
   notebook.ipynb     the same notebook executed top to bottom, outputs saved
   figures/           rendered PNGs
+  peaks.geojson      rated targets and the observer, for QGIS and GitHub's map view
   field/             observations.csv and photos/: the field check
   result.json        the scored result the site post is drafted from
 ```

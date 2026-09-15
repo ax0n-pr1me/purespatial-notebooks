@@ -1,5 +1,7 @@
 """Constants for the Engineer Mountain viewshed. fetch.py and notebook.py import these; nothing else defines them."""
 
+from purespatial.figures import Style
+
 SLUG = "engineer-mountain-viewshed-3dep-lidar"
 STATE = "CO"
 SUBJECT_NAME = "Engineer Mountain"
@@ -18,6 +20,18 @@ NEAR_RADIUS_M = 3_000
 NEAR_RES_M = 1
 
 OBSERVER_HEIGHT_M = 1.7  # eye height standing on the summit cell
+SNAP_RADIUS_M = 100  # the observer moves to the highest 1 m cell this close to the GNIS point
 MIN_PEAK_ELEVATION_M = 3_600  # named summits this high or higher are candidates
 MIN_PEAK_DISTANCE_KM = 1.0
 MAX_PEAKS = 40
+
+# Figure style: every knob is a field on Style (purespatial/figures.py); change them here and `make run`.
+STYLE = Style(label_top=20, hero_label_top=12)
+
+# Hero image, all written to figures/, this one copied to hero.png:
+#   "relief"        the 1 m lidar surface with the whole 3 km viewshed disc, 50 m contours
+#   "relief-tight"  the summit close up at native 1 m pixels, 50 m contours
+#   "relief-plain"  the wide surface without contours
+#   "panorama"      the skyline as seen from the summit
+#   "map"           the 60 km viewshed map        "map-dark"  the same as a night map with sightlines
+HERO = "relief"
