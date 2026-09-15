@@ -1,15 +1,24 @@
 {
   "schema": "purespatial-result/1",
-  "generated": "2026-09-15T20:08:14+00:00",
+  "generated": "2026-09-15T20:59:18+00:00",
   "slug": "engineer-mountain-viewshed-3dep-lidar",
   "subject": {
     "name": "Engineer Mountain",
     "kind": "landscape",
     "region": "Colorado",
-    "lat": 37.6992257,
-    "lon": -107.8067202,
     "county": "San Juan",
-    "elevation_m_1m_dem": 3944.628173828125
+    "gnis": {
+      "lat": 37.6992257,
+      "lon": -107.8067202,
+      "elevation_m_1m_dem": 3944.628173828125
+    },
+    "observer": {
+      "lat": 37.69930480673391,
+      "lon": -107.80651973181189,
+      "elevation_m_1m_dem": 3954.582275390625,
+      "snapped_within_m": 100,
+      "moved_m": 19.7394850646426
+    }
   },
   "datasets": [
     "3dep-lidar"
@@ -17,6 +26,7 @@
   "method": {
     "tool": "gdal_viewshed",
     "observer_height_m": 1.7,
+    "observer_snapped_to_highest_cell_within_m": 100,
     "target_height_m": 0.0,
     "curvature_coefficient": 0.85714,
     "far_field": {
@@ -55,8 +65,8 @@
       "max_count": 40
     },
     "visible_fraction": {
-      "far": 0.025974261245985678,
-      "near": 0.1274603152432435
+      "far": 0.03111569021016428,
+      "near": 0.30201032150365653
     }
   },
   "predictions": [
@@ -68,7 +78,7 @@
       "elevation_m": 4164.0,
       "distance_km": 31.9,
       "bearing_deg": 2.0,
-      "predicted": "hidden"
+      "predicted": "visible"
     },
     {
       "name": "Mount Sneffels",
@@ -78,7 +88,7 @@
       "elevation_m": 4293.0,
       "distance_km": 33.8,
       "bearing_deg": 2.0,
-      "predicted": "hidden"
+      "predicted": "visible"
     },
     {
       "name": "Teakettle Mountain",
@@ -126,7 +136,7 @@
       "lat": 37.91296,
       "lon": -107.50445,
       "elevation_m": 4274.0,
-      "distance_km": 35.7,
+      "distance_km": 35.6,
       "bearing_deg": 48.0,
       "predicted": "visible"
     },
@@ -206,7 +216,7 @@
       "lat": 37.6928,
       "lon": -107.61014,
       "elevation_m": 4189.0,
-      "distance_km": 17.4,
+      "distance_km": 17.3,
       "bearing_deg": 92.0,
       "predicted": "visible"
     },
@@ -236,8 +246,8 @@
       "lat": 37.68494,
       "lon": -107.58122,
       "elevation_m": 4177.0,
-      "distance_km": 20.0,
-      "bearing_deg": 94.0,
+      "distance_km": 19.9,
+      "bearing_deg": 95.0,
       "predicted": "visible"
     },
     {
@@ -246,7 +256,7 @@
       "lat": 37.67644,
       "lon": -107.55951,
       "elevation_m": 4166.0,
-      "distance_km": 22.0,
+      "distance_km": 21.9,
       "bearing_deg": 97.0,
       "predicted": "visible"
     },
@@ -266,7 +276,7 @@
       "lat": 37.64314,
       "lon": -107.6292,
       "elevation_m": 4182.0,
-      "distance_km": 16.9,
+      "distance_km": 16.8,
       "bearing_deg": 112.0,
       "predicted": "visible"
     },
@@ -276,7 +286,7 @@
       "lat": 37.62728,
       "lon": -107.5958,
       "elevation_m": 4261.0,
-      "distance_km": 20.3,
+      "distance_km": 20.2,
       "bearing_deg": 113.0,
       "predicted": "visible"
     },
@@ -316,7 +326,7 @@
       "lat": 37.61243,
       "lon": -107.59199,
       "elevation_m": 4197.0,
-      "distance_km": 21.3,
+      "distance_km": 21.2,
       "bearing_deg": 117.0,
       "predicted": "hidden"
     },
@@ -368,7 +378,7 @@
       "elevation_m": 4323.0,
       "distance_km": 22.5,
       "bearing_deg": 314.0,
-      "predicted": "hidden"
+      "predicted": "visible"
     },
     {
       "name": "Gladstone Peak",
@@ -378,7 +388,7 @@
       "elevation_m": 4212.0,
       "distance_km": 22.5,
       "bearing_deg": 316.0,
-      "predicted": "hidden"
+      "predicted": "visible"
     },
     {
       "name": "Wilson Peak",
@@ -388,7 +398,7 @@
       "elevation_m": 4261.0,
       "distance_km": 23.8,
       "bearing_deg": 319.0,
-      "predicted": "hidden"
+      "predicted": "visible"
     },
     {
       "name": "Grizzly Peak",
@@ -396,9 +406,9 @@
       "lat": 37.7559,
       "lon": -107.86181,
       "elevation_m": 4176.0,
-      "distance_km": 7.9,
+      "distance_km": 8.0,
       "bearing_deg": 322.0,
-      "predicted": "hidden"
+      "predicted": "visible"
     },
     {
       "name": "San Miguel Peak",
@@ -408,7 +418,7 @@
       "elevation_m": 4173.0,
       "distance_km": 10.2,
       "bearing_deg": 330.0,
-      "predicted": "hidden"
+      "predicted": "visible"
     },
     {
       "name": "Vermilion Peak",
@@ -418,7 +428,7 @@
       "elevation_m": 4221.0,
       "distance_km": 11.3,
       "bearing_deg": 350.0,
-      "predicted": "hidden"
+      "predicted": "visible"
     },
     {
       "name": "Golden Horn",
@@ -438,7 +448,7 @@
       "elevation_m": 4183.0,
       "distance_km": 10.8,
       "bearing_deg": 353.0,
-      "predicted": "hidden"
+      "predicted": "visible"
     },
     {
       "name": "Dallas Peak",
@@ -474,7 +484,7 @@
     {
       "file": "figures/far-field.png",
       "alt": "Viewshed from the Engineer Mountain summit over a hillshade of the San Juan Mountains, visible ground tinted green, named peaks marked visible or hidden.",
-      "caption": "Modeled visibility from the summit at 30 m over 60 km: 18 of 40 named peaks rated visible."
+      "caption": "Modeled visibility from the summit at 30 m over 60 km: 27 of 40 named peaks rated visible."
     },
     {
       "file": "figures/near-field.png",

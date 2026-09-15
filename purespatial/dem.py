@@ -17,6 +17,8 @@ from pathlib import Path
 
 import numpy as np
 import rasterio
+import rasterio.transform
+import rasterio.windows
 import rioxarray  # noqa: F401  (registers the .rio accessor on xarray objects)
 from pyproj import CRS, Transformer
 from rasterio.enums import Resampling
@@ -99,3 +101,35 @@ def info(path: str | Path) -> dict:
             "crs": ds.crs.to_string(),
             "bounds": [float(v) for v in ds.bounds],
         }
+
+
+def highest_point(path: str | Path, lon: float, lat: float, radius_m: float) -> tuple[float, float, float]:
+    """WGS84 coordinates and elevation of the highest cell within radius_m of a point.
+
+    Gazetteer coordinates for a summit often sit tens of metres off the crest;
+    a viewshed from that cell is hidden by the summit itself. Snap first.
+    """
+    with rasterio.open(path) as ds:
+        to_map = Transformer.from_crs("EPSG:4326", ds.crs, always_xy=True)
+        to_wgs = Transformer.from_crs(ds.crs, "EPSG:4326", always_xy=True)
+        x, y = to_map.transform(lon, lat)
+        res = ds.res[0]
+        r = int(math.ceil(radius_m / res))
+        row, col = ds.index(x, y)
+        r0, c0 = max(row - r, 0), max(col - r, 0)
+        r1, c1 = min(row + r + 1, ds.height), min(col + r + 1, ds.width)
+        win = rasterio.windows.Window(c0, r0, c1 - c0, r1 - r0)
+        arr = ds.read(1, window=win).astype("float64")
+        if ds.nodata is not None:
+            arr[arr == ds.nodata] = np.nan
+        rows, cols = np.mgrid[r0:r1, c0:c1]
+        cx, cy = rasterio.transform.xy(ds.transform, rows.ravel(), cols.ravel())
+        dist = np.hypot(np.asarray(cx, dtype=float) - x, np.asarray(cy, dtype=float) - y).reshape(arr.shape)
+        arr[dist > radius_m] = np.nan
+        if not np.isfinite(arr).any():
+            raise ValueError(f"no elevation within {radius_m} m of ({lon}, {lat}) in {Path(path).name}")
+        i = np.nanargmax(arr)
+        rr, cc = np.unravel_index(i, arr.shape)
+        px, py = ds.xy(r0 + rr, c0 + cc)
+        plon, plat = to_wgs.transform(px, py)
+    return float(plon), float(plat), float(arr[rr, cc])

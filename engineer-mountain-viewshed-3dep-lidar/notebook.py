@@ -42,7 +42,9 @@ from params import (
     OBSERVER_HEIGHT_M,
     REGION,
     SLUG,
+    SNAP_RADIUS_M,
     STATE,
+    STYLE,
     SUBJECT_NAME,
 )
 
@@ -74,10 +76,24 @@ print(f"{summit['name']}, {summit['county']} County: {LAT:.5f} N, {abs(LON):.5f}
 far_dem = ps.dem.fetch_dem(LON, LAT, FAR_RADIUS_M, FAR_RES_M, DATA / f"dem_{FAR_RES_M}m_{FAR_RADIUS_M // 1000}km.tif")
 near_dem = ps.dem.fetch_dem(LON, LAT, NEAR_RADIUS_M, NEAR_RES_M, DATA / f"dem_{NEAR_RES_M}m_{NEAR_RADIUS_M // 1000}km.tif")
 far_info, near_info = ps.dem.info(far_dem), ps.dem.info(near_dem)
-summit_elev_near = float(ps.dem.sample(near_dem, LON, LAT)[0])
-summit_elev_far = float(ps.dem.sample(far_dem, LON, LAT)[0])
+gnis_elev_near = float(ps.dem.sample(near_dem, LON, LAT)[0])
 print(f"far field  {far_info['width']} x {far_info['height']} cells at {far_info['resolution_m']:g} m")
 print(f"near field {near_info['width']} x {near_info['height']} cells at {near_info['resolution_m']:g} m")
+print(f"1 m DEM at the GNIS point: {gnis_elev_near:.1f} m")
+
+# %% [markdown]
+# ### The observer stands on the crest, not on the gazetteer point
+#
+# GNIS places a summit to the nearest few tens of metres. On a 1 m grid that is the difference between
+# the crest and the slope below it, and a viewshed from the slope is hidden by the summit itself (the
+# first run of this notebook saw nothing to the north within 3 km). The observer therefore moves to the
+# highest 1 m cell within `SNAP_RADIUS_M` of the GNIS point, and both viewsheds use that cell.
+
+# %%
+OBS_LON, OBS_LAT, summit_elev_near = ps.dem.highest_point(near_dem, LON, LAT, SNAP_RADIUS_M)
+_, snap_km = ps.peaks.bearing_distance(LON, LAT, [OBS_LON], [OBS_LAT])
+summit_elev_far = float(ps.dem.sample(far_dem, OBS_LON, OBS_LAT)[0])
+print(f"observer: {OBS_LAT:.5f} N, {abs(OBS_LON):.5f} W, {snap_km[0] * 1000:.0f} m from the GNIS point")
 print(f"summit elevation: {summit_elev_near:.1f} m in the 1 m DEM, {summit_elev_far:.1f} m in the 30 m DEM")
 
 # %% [markdown]
@@ -88,10 +104,10 @@ print(f"summit elevation: {summit_elev_near:.1f} m in the 1 m DEM, {summit_elev_
 
 # %%
 far_vs = ps.viewshed.run_viewshed(
-    far_dem, LON, LAT, DATA / "viewshed_far.tif", observer_height=OBSERVER_HEIGHT_M, max_distance=FAR_RADIUS_M
+    far_dem, OBS_LON, OBS_LAT, DATA / "viewshed_far.tif", observer_height=OBSERVER_HEIGHT_M, max_distance=FAR_RADIUS_M
 )
 near_vs = ps.viewshed.run_viewshed(
-    near_dem, LON, LAT, DATA / "viewshed_near.tif", observer_height=OBSERVER_HEIGHT_M, max_distance=NEAR_RADIUS_M
+    near_dem, OBS_LON, OBS_LAT, DATA / "viewshed_near.tif", observer_height=OBSERVER_HEIGHT_M, max_distance=NEAR_RADIUS_M
 )
 print(f"visible share of the far field:  {ps.viewshed.visible_fraction(far_vs):.1%}")
 print(f"visible share of the near field: {ps.viewshed.visible_fraction(near_vs):.1%}")
@@ -103,7 +119,7 @@ print(f"visible share of the near field: {ps.viewshed.visible_fraction(near_vs):
 # against the far viewshed at its own coordinates.
 
 # %%
-cand = ps.peaks.summits_near(gnis, LON, LAT, max_km=FAR_RADIUS_M / 1000, min_km=MIN_PEAK_DISTANCE_KM)
+cand = ps.peaks.summits_near(gnis, OBS_LON, OBS_LAT, max_km=FAR_RADIUS_M / 1000, min_km=MIN_PEAK_DISTANCE_KM)
 cand["elevation_m"] = ps.dem.sample(far_dem, cand["lon"], cand["lat"])
 cand = cand.dropna(subset=["elevation_m"])
 cand = cand[cand["elevation_m"] >= MIN_PEAK_ELEVATION_M]
@@ -117,21 +133,45 @@ print(f"{len(peaks)} named peaks rated: {n_vis} visible, {len(peaks) - n_vis} hi
 peaks[["name", "county", "elevation_m", "distance_km", "bearing_deg", "predicted"]].round({"elevation_m": 0, "distance_km": 1, "bearing_deg": 0})
 
 # %% [markdown]
+# The same table as points for QGIS or GitHub's map view, with the observer as one more feature.
+
+# %%
+import geopandas as gpd
+
+pts = peaks[["name", "county", "elevation_m", "distance_km", "bearing_deg", "predicted", "lon", "lat"]].round(
+    {"elevation_m": 0, "distance_km": 1, "bearing_deg": 0, "lon": 5, "lat": 5}
+)
+observer_row = pd.DataFrame([{"name": SUBJECT_NAME, "county": summit["county"], "elevation_m": round(summit_elev_near), "distance_km": 0.0, "bearing_deg": 0.0, "predicted": "observer", "lon": round(OBS_LON, 5), "lat": round(OBS_LAT, 5)}])
+pts = pd.concat([observer_row, pts], ignore_index=True)
+gpd.GeoDataFrame(pts, geometry=gpd.points_from_xy(pts["lon"], pts["lat"]), crs="EPSG:4326").to_file(HERE / "peaks.geojson", driver="GeoJSON")
+print("wrote peaks.geojson with", len(pts), "features")
+
+# %% [markdown]
 # ## Field check
 #
-# `field/observations.csv` is written once, with the model's rating per peak and an empty `observed`
-# column. The author fills `observed` (visible or hidden) from the summit photographs and names the photo.
-# Filled rows are never overwritten. The score below counts only filled rows.
+# `field/observations.csv` has one row per rated peak. The model's columns (`predicted`, elevation,
+# distance, bearing) are refreshed on every run; the author's columns (`observed`, `photo`, `note`) are
+# read from the existing file and written back untouched, so a re-run never loses a mark. The author
+# fills `observed` (visible or hidden) from the summit photographs. The score counts only filled rows.
 
 # %%
 OBS = FIELD / "observations.csv"
-cols = ["name", "county", "lat", "lon", "elevation_m", "distance_km", "bearing_deg", "predicted", "observed", "photo", "note"]
-if not OBS.exists():
-    template = peaks.assign(observed="", photo="", note="")[cols].round(
-        {"lat": 5, "lon": 5, "elevation_m": 0, "distance_km": 1, "bearing_deg": 0}
-    )
-    template.to_csv(OBS, index=False)
-    print(f"wrote {OBS.relative_to(HERE)} with {len(template)} rows to fill")
+AUTHOR_COLS = ["observed", "photo", "note"]
+cols = ["name", "county", "lat", "lon", "elevation_m", "distance_km", "bearing_deg", "predicted", *AUTHOR_COLS]
+model_rows = peaks.round({"lat": 5, "lon": 5, "elevation_m": 0, "distance_km": 1, "bearing_deg": 0})
+if OBS.exists():
+    previous = pd.read_csv(OBS, dtype=str, keep_default_na=False)
+    kept = previous[["name", *AUTHOR_COLS]]
+    flipped = model_rows.merge(previous[["name", "predicted"]].rename(columns={"predicted": "was"}), on="name", how="left")
+    flipped = flipped[(flipped["was"] != "") & (flipped["was"].notna()) & (flipped["was"] != flipped["predicted"])]
+    if len(flipped):
+        print(f"{len(flipped)} ratings changed since the last run:")
+        print(flipped[["name", "was", "predicted"]].to_string(index=False))
+else:
+    kept = pd.DataFrame({"name": model_rows["name"], "observed": "", "photo": "", "note": ""})
+table = model_rows.merge(kept, on="name", how="left").fillna({"observed": "", "photo": "", "note": ""})[cols]
+table.to_csv(OBS, index=False)
+print(f"wrote {OBS.relative_to(HERE)}: {len(table)} rows, {(table['observed'] != '').sum()} observed")
 obs = pd.read_csv(OBS, dtype={"observed": "string", "photo": "string", "note": "string"}, keep_default_na=False)
 merged = peaks.merge(obs[["name", "observed", "photo", "note"]], on="name", how="left")
 score = ps.score.score_predictions(merged)
@@ -145,14 +185,14 @@ print(sentence or "field check pending: fill field/observations.csv and re-run")
 # %%
 by_height = peaks.sort_values("elevation_m", ascending=False)
 far_png = ps.figures.viewshed_map(
-    far_dem, far_vs, (LON, LAT), by_height, FIG / "far-field.png", label_top=20,
+    far_dem, far_vs, (OBS_LON, OBS_LAT), by_height, FIG / "far-field.png", style=STYLE,
     title=f"Modeled visibility from the {SUBJECT_NAME} summit. 3DEP 1/3 arc-second DEM at {FAR_RES_M} m, {FAR_RADIUS_M // 1000} km radius.",
 )
 near_png = ps.figures.viewshed_map(
-    near_dem, near_vs, (LON, LAT), None, FIG / "near-field.png",
+    near_dem, near_vs, (OBS_LON, OBS_LAT), None, FIG / "near-field.png", style=STYLE,
     title=f"Near field. 3DEP {NEAR_RES_M} m lidar bare-earth DEM, {NEAR_RADIUS_M // 1000} km radius.",
 )
-hero_png = ps.figures.hero_map(far_dem, far_vs, (LON, LAT), by_height.head(12), FIG / "hero.png")
+hero_png = ps.figures.hero_map(far_dem, far_vs, (OBS_LON, OBS_LAT), by_height, FIG / "hero.png", style=STYLE)
 [p.name for p in (far_png, near_png, hero_png)]
 
 # %% [markdown]
@@ -180,11 +220,16 @@ figures = [
 ps.result.write_result(
     HERE / "result.json",
     slug=SLUG,
-    subject={"name": SUBJECT_NAME, "kind": "landscape", "region": REGION, "lat": LAT, "lon": LON, "county": summit["county"], "elevation_m_1m_dem": summit_elev_near},
+    subject={
+        "name": SUBJECT_NAME, "kind": "landscape", "region": REGION, "county": summit["county"],
+        "gnis": {"lat": LAT, "lon": LON, "elevation_m_1m_dem": gnis_elev_near},
+        "observer": {"lat": OBS_LAT, "lon": OBS_LON, "elevation_m_1m_dem": summit_elev_near, "snapped_within_m": SNAP_RADIUS_M, "moved_m": float(snap_km[0] * 1000)},
+    },
     datasets=DATASETS,
     method={
         "tool": "gdal_viewshed",
         "observer_height_m": OBSERVER_HEIGHT_M,
+        "observer_snapped_to_highest_cell_within_m": SNAP_RADIUS_M,
         "target_height_m": 0.0,
         "curvature_coefficient": ps.viewshed.CURVATURE,
         "far_field": {**far_info, "radius_m": FAR_RADIUS_M, "product": "3DEP 1/3 arc-second seamless DEM, resampled"},

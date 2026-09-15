@@ -53,3 +53,19 @@ def test_info_reports_grid(tmp_path):
     i = dem.info(path)
     assert (i["width"], i["height"], i["resolution_m"]) == (6, 4, 10.0)
     assert i["crs"] == "EPSG:32613"
+
+
+def test_highest_point_snaps_to_the_crest_within_radius(tmp_path):
+    arr = np.full((40, 40), 3000.0)
+    arr[10, 30] = 3950.0  # a summit 20 cells (200 m) east of the query point at (10, 10)
+    arr[12, 13] = 3900.0  # a lower crest 3 cells (~36 m) away
+    path = _write_raster(tmp_path / "d.tif", arr)
+    from pyproj import Transformer
+
+    with rasterio.open(path) as ds:
+        qx, qy = ds.xy(10, 10)
+    lon, lat = Transformer.from_crs("EPSG:32613", "EPSG:4326", always_xy=True).transform(qx, qy)
+    plon, plat, elev = dem.highest_point(path, lon, lat, radius_m=60)
+    assert elev == 3900.0
+    plon2, plat2, elev2 = dem.highest_point(path, lon, lat, radius_m=300)
+    assert elev2 == 3950.0 and abs(plon2 - lon) > abs(plon - lon)
