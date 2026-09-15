@@ -1,6 +1,6 @@
 {
   "schema": "purespatial-result/1",
-  "generated": "2026-09-15T20:59:18+00:00",
+  "generated": "2026-09-15T21:22:16+00:00",
   "slug": "engineer-mountain-viewshed-3dep-lidar",
   "subject": {
     "name": "Engineer Mountain",
@@ -492,8 +492,13 @@
       "caption": "The 1 m bare-earth model removes the trees, so near ridgelines below treeline may show as visible when they are not."
     },
     {
+      "file": "figures/panorama.png",
+      "alt": "Skyline panorama from the Engineer Mountain summit in two half-turns, ridges shaded by distance, named peaks marked visible on the skyline or hidden inside the ridges.",
+      "caption": "The skyline the model computes from the summit; peaks rated visible stand on it, 13 rated hidden sit behind nearer ridges."
+    },
+    {
       "file": "figures/hero.png",
-      "alt": "Viewshed from the Engineer Mountain summit over a hillshade, framed wide.",
+      "alt": "Skyline panorama from the Engineer Mountain summit, ridges shaded by distance, named peaks marked.",
       "caption": "Hero."
     }
   ]

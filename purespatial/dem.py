@@ -114,7 +114,7 @@ def highest_point(path: str | Path, lon: float, lat: float, radius_m: float) -> 
         to_wgs = Transformer.from_crs(ds.crs, "EPSG:4326", always_xy=True)
         x, y = to_map.transform(lon, lat)
         res = ds.res[0]
-        r = int(math.ceil(radius_m / res))
+        r = math.ceil(radius_m / res)
         row, col = ds.index(x, y)
         r0, c0 = max(row - r, 0), max(col - r, 0)
         r1, c1 = min(row + r + 1, ds.height), min(col + r + 1, ds.width)

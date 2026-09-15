@@ -6,9 +6,10 @@ Modules
   peaks     named summits from USGS GNIS, bearings and distances from an observer
   score     predictions against field observations; the one result sentence
   figures   hillshade, viewshed tint, labeled peaks, in the site's manner
+  panorama  the skyline as seen from the observer, peaks placed on or behind it
   result    result.json, the hand-off the site's /write-post reads
 """
 
-from . import dem, figures, peaks, result, score, viewshed
+from . import dem, figures, panorama, peaks, result, score, viewshed
 
-__all__ = ["dem", "figures", "peaks", "result", "score", "viewshed"]
+__all__ = ["dem", "figures", "panorama", "peaks", "result", "score", "viewshed"]

@@ -65,7 +65,7 @@ def test_highest_point_snaps_to_the_crest_within_radius(tmp_path):
     with rasterio.open(path) as ds:
         qx, qy = ds.xy(10, 10)
     lon, lat = Transformer.from_crs("EPSG:32613", "EPSG:4326", always_xy=True).transform(qx, qy)
-    plon, plat, elev = dem.highest_point(path, lon, lat, radius_m=60)
+    plon, _plat, elev = dem.highest_point(path, lon, lat, radius_m=60)
     assert elev == 3900.0
-    plon2, plat2, elev2 = dem.highest_point(path, lon, lat, radius_m=300)
+    plon2, _plat2, elev2 = dem.highest_point(path, lon, lat, radius_m=300)
     assert elev2 == 3950.0 and abs(plon2 - lon) > abs(plon - lon)

@@ -35,7 +35,7 @@ Every run is cached: the DEMs and names file live in `data/`, so a re-run is the
    from purespatial.figures import Style
    STYLE = Style(label_top=15, tint_alpha=0.85, hillshade_low=-0.6)
    ```
-   Radii, resolutions, elevation thresholds, and the peak count are the other constants in `params.py`. Then:
+   Shading lives there too: `lights` (azimuth and weight per light), `vertical_exaggeration`, `slope_shade`, `contrast`, `ground_warmth`, `contours_m` and `index_every`, `tint`, `tint_alpha`, `tint_feather_px`, `dark`, `sightlines`. `HERO` picks which rendering becomes `figures/hero.png`; every candidate is written each run so you can compare them side by side. Radii, resolutions, elevation thresholds, and the peak count are the other constants in `params.py`. Then:
    ```bash
    make run SLUG=engineer-mountain-viewshed-3dep-lidar
    ```
