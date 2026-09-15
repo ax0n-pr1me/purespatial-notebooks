@@ -1,0 +1,19 @@
+# Inputs are refetched by each post's fetch.py; rasters and point clouds never enter the repository.
+data/
+*.tif
+*.tiff
+*.laz
+*.las
+*.gpkg
+*.zip
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# OS
+.DS_Store

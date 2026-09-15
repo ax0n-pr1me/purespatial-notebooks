@@ -1,0 +1,490 @@
+{
+  "schema": "purespatial-result/1",
+  "generated": "2026-09-15T20:08:14+00:00",
+  "slug": "engineer-mountain-viewshed-3dep-lidar",
+  "subject": {
+    "name": "Engineer Mountain",
+    "kind": "landscape",
+    "region": "Colorado",
+    "lat": 37.6992257,
+    "lon": -107.8067202,
+    "county": "San Juan",
+    "elevation_m_1m_dem": 3944.628173828125
+  },
+  "datasets": [
+    "3dep-lidar"
+  ],
+  "method": {
+    "tool": "gdal_viewshed",
+    "observer_height_m": 1.7,
+    "target_height_m": 0.0,
+    "curvature_coefficient": 0.85714,
+    "far_field": {
+      "file": "dem_30m_60km.tif",
+      "width": 5135,
+      "height": 5081,
+      "resolution_m": 30.0,
+      "crs": "EPSG:32613",
+      "bounds": [
+        175056.27808613167,
+        4100045.0026202565,
+        329106.2780861317,
+        4252475.0026202565
+      ],
+      "radius_m": 60000,
+      "product": "3DEP 1/3 arc-second seamless DEM, resampled"
+    },
+    "near_field": {
+      "file": "dem_1m_3km.tif",
+      "width": 7701,
+      "height": 7620,
+      "resolution_m": 1.0,
+      "crs": "EPSG:32613",
+      "bounds": [
+        248697.68006340723,
+        4172342.0980281914,
+        256398.68006340723,
+        4179962.0980281914
+      ],
+      "radius_m": 3000,
+      "product": "3DEP 1 m lidar bare-earth DEM"
+    },
+    "peaks": {
+      "source": "USGS GNIS DomesticNames (Summit)",
+      "min_elevation_m": 3600,
+      "max_count": 40
+    },
+    "visible_fraction": {
+      "far": 0.025974261245985678,
+      "near": 0.1274603152432435
+    }
+  },
+  "predictions": [
+    {
+      "name": "Gilpin Peak",
+      "county": "Ouray",
+      "lat": 37.98633,
+      "lon": -107.79326,
+      "elevation_m": 4164.0,
+      "distance_km": 31.9,
+      "bearing_deg": 2.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Mount Sneffels",
+      "county": "Ouray",
+      "lat": 38.00384,
+      "lon": -107.79227,
+      "elevation_m": 4293.0,
+      "distance_km": 33.8,
+      "bearing_deg": 2.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Teakettle Mountain",
+      "county": "Ouray",
+      "lat": 38.00048,
+      "lon": -107.76152,
+      "elevation_m": 4178.0,
+      "distance_km": 33.7,
+      "bearing_deg": 7.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Potosi Peak",
+      "county": "Ouray",
+      "lat": 37.98979,
+      "lon": -107.74928,
+      "elevation_m": 4197.0,
+      "distance_km": 32.6,
+      "bearing_deg": 9.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Wetterhorn Peak",
+      "county": "Hinsdale",
+      "lat": 38.06061,
+      "lon": -107.51088,
+      "elevation_m": 4264.0,
+      "distance_km": 47.8,
+      "bearing_deg": 33.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Uncompahgre Peak",
+      "county": "Hinsdale",
+      "lat": 38.07145,
+      "lon": -107.46253,
+      "elevation_m": 4353.0,
+      "distance_km": 51.2,
+      "bearing_deg": 36.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Handies Peak",
+      "county": "Hinsdale",
+      "lat": 37.91296,
+      "lon": -107.50445,
+      "elevation_m": 4274.0,
+      "distance_km": 35.7,
+      "bearing_deg": 48.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Jones Mountain",
+      "county": "San Juan",
+      "lat": 37.8965,
+      "lon": -107.5265,
+      "elevation_m": 4205.0,
+      "distance_km": 33.0,
+      "bearing_deg": 48.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Niagara Peak",
+      "county": "San Juan",
+      "lat": 37.88925,
+      "lon": -107.53351,
+      "elevation_m": 4199.0,
+      "distance_km": 32.0,
+      "bearing_deg": 49.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "American Peak",
+      "county": "Hinsdale",
+      "lat": 37.89942,
+      "lon": -107.51248,
+      "elevation_m": 4190.0,
+      "distance_km": 34.1,
+      "bearing_deg": 49.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Redcloud Peak",
+      "county": "Hinsdale",
+      "lat": 37.94099,
+      "lon": -107.42173,
+      "elevation_m": 4263.0,
+      "distance_km": 43.2,
+      "bearing_deg": 52.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Sunshine Peak",
+      "county": "Hinsdale",
+      "lat": 37.92272,
+      "lon": -107.42556,
+      "elevation_m": 4254.0,
+      "distance_km": 41.7,
+      "bearing_deg": 53.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Half Peak",
+      "county": "Hinsdale",
+      "lat": 37.86414,
+      "lon": -107.46657,
+      "elevation_m": 4216.0,
+      "distance_km": 35.1,
+      "bearing_deg": 58.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Pole Creek Mountain",
+      "county": "Hinsdale",
+      "lat": 37.79598,
+      "lon": -107.43112,
+      "elevation_m": 4178.0,
+      "distance_km": 34.8,
+      "bearing_deg": 72.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Arrow Peak",
+      "county": "San Juan",
+      "lat": 37.6928,
+      "lon": -107.61014,
+      "elevation_m": 4189.0,
+      "distance_km": 17.4,
+      "bearing_deg": 92.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Rio Grande Pyramid",
+      "county": "Hinsdale",
+      "lat": 37.67953,
+      "lon": -107.39235,
+      "elevation_m": 4202.0,
+      "distance_km": 36.6,
+      "bearing_deg": 93.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Vestal Peak",
+      "county": "San Juan",
+      "lat": 37.68937,
+      "lon": -107.60268,
+      "elevation_m": 4201.0,
+      "distance_km": 18.0,
+      "bearing_deg": 93.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Trinity Peaks",
+      "county": "San Juan",
+      "lat": 37.68494,
+      "lon": -107.58122,
+      "elevation_m": 4177.0,
+      "distance_km": 20.0,
+      "bearing_deg": 94.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Storm King Peak",
+      "county": "San Juan",
+      "lat": 37.67644,
+      "lon": -107.55951,
+      "elevation_m": 4166.0,
+      "distance_km": 22.0,
+      "bearing_deg": 97.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Jagged Mountain",
+      "county": "San Juan",
+      "lat": 37.64557,
+      "lon": -107.58394,
+      "elevation_m": 4175.0,
+      "distance_km": 20.5,
+      "bearing_deg": 107.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Animas Mountain",
+      "county": "San Juan",
+      "lat": 37.64314,
+      "lon": -107.6292,
+      "elevation_m": 4182.0,
+      "distance_km": 16.9,
+      "bearing_deg": 112.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Sunlight Peak",
+      "county": "La Plata",
+      "lat": 37.62728,
+      "lon": -107.5958,
+      "elevation_m": 4261.0,
+      "distance_km": 20.3,
+      "bearing_deg": 113.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Windom Peak",
+      "county": "La Plata",
+      "lat": 37.62131,
+      "lon": -107.59176,
+      "elevation_m": 4261.0,
+      "distance_km": 20.8,
+      "bearing_deg": 114.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Glacier Point",
+      "county": "La Plata",
+      "lat": 37.62602,
+      "lon": -107.61437,
+      "elevation_m": 4165.0,
+      "distance_km": 18.8,
+      "bearing_deg": 116.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "North Eolus",
+      "county": "La Plata",
+      "lat": 37.62544,
+      "lon": -107.62103,
+      "elevation_m": 4256.0,
+      "distance_km": 18.3,
+      "bearing_deg": 117.0,
+      "predicted": "visible"
+    },
+    {
+      "name": "Jupiter Mountain",
+      "county": "La Plata",
+      "lat": 37.61243,
+      "lon": -107.59199,
+      "elevation_m": 4197.0,
+      "distance_km": 21.3,
+      "bearing_deg": 117.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Pigeon Peak",
+      "county": "La Plata",
+      "lat": 37.63237,
+      "lon": -107.64642,
+      "elevation_m": 4225.0,
+      "distance_km": 16.0,
+      "bearing_deg": 118.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Mount Eolus",
+      "county": "La Plata",
+      "lat": 37.62169,
+      "lon": -107.6226,
+      "elevation_m": 4264.0,
+      "distance_km": 18.4,
+      "bearing_deg": 118.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Turret Peak",
+      "county": "La Plata",
+      "lat": 37.62766,
+      "lon": -107.63984,
+      "elevation_m": 4181.0,
+      "distance_km": 16.7,
+      "bearing_deg": 118.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "El Diente Peak",
+      "county": "Dolores",
+      "lat": 37.83943,
+      "lon": -108.00534,
+      "elevation_m": 4287.0,
+      "distance_km": 23.4,
+      "bearing_deg": 312.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Mount Wilson",
+      "county": "Dolores",
+      "lat": 37.83921,
+      "lon": -107.99158,
+      "elevation_m": 4323.0,
+      "distance_km": 22.5,
+      "bearing_deg": 314.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Gladstone Peak",
+      "county": "San Miguel",
+      "lat": 37.84523,
+      "lon": -107.98388,
+      "elevation_m": 4212.0,
+      "distance_km": 22.5,
+      "bearing_deg": 316.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Wilson Peak",
+      "county": "San Miguel",
+      "lat": 37.8603,
+      "lon": -107.98465,
+      "elevation_m": 4261.0,
+      "distance_km": 23.8,
+      "bearing_deg": 319.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Grizzly Peak",
+      "county": "San Juan",
+      "lat": 37.7559,
+      "lon": -107.86181,
+      "elevation_m": 4176.0,
+      "distance_km": 7.9,
+      "bearing_deg": 322.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "San Miguel Peak",
+      "county": "Dolores",
+      "lat": 37.77914,
+      "lon": -107.86452,
+      "elevation_m": 4173.0,
+      "distance_km": 10.2,
+      "bearing_deg": 330.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Vermilion Peak",
+      "county": "San Miguel",
+      "lat": 37.79934,
+      "lon": -107.82847,
+      "elevation_m": 4221.0,
+      "distance_km": 11.3,
+      "bearing_deg": 350.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Golden Horn",
+      "county": "San Juan",
+      "lat": 37.80473,
+      "lon": -107.82465,
+      "elevation_m": 4168.0,
+      "distance_km": 11.8,
+      "bearing_deg": 352.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Fuller Peak",
+      "county": "San Juan",
+      "lat": 37.79599,
+      "lon": -107.82129,
+      "elevation_m": 4183.0,
+      "distance_km": 10.8,
+      "bearing_deg": 353.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Dallas Peak",
+      "county": "San Miguel",
+      "lat": 37.98811,
+      "lon": -107.82368,
+      "elevation_m": 4176.0,
+      "distance_km": 32.1,
+      "bearing_deg": 357.0,
+      "predicted": "hidden"
+    },
+    {
+      "name": "Ulysses S Grant Peak",
+      "county": "San Juan",
+      "lat": 37.82443,
+      "lon": -107.80723,
+      "elevation_m": 4172.0,
+      "distance_km": 13.9,
+      "bearing_deg": 360.0,
+      "predicted": "hidden"
+    }
+  ],
+  "field_check": {
+    "status": "pending",
+    "file": "field/observations.csv",
+    "photos": "field/photos/",
+    "checked_against": "the summit photographs"
+  },
+  "score": null,
+  "result": null,
+  "findings": [],
+  "figures": [
+    {
+      "file": "figures/far-field.png",
+      "alt": "Viewshed from the Engineer Mountain summit over a hillshade of the San Juan Mountains, visible ground tinted green, named peaks marked visible or hidden.",
+      "caption": "Modeled visibility from the summit at 30 m over 60 km: 18 of 40 named peaks rated visible."
+    },
+    {
+      "file": "figures/near-field.png",
+      "alt": "Near-field viewshed from the Engineer Mountain summit on the 1 m lidar bare-earth DEM, 3 km radius.",
+      "caption": "The 1 m bare-earth model removes the trees, so near ridgelines below treeline may show as visible when they are not."
+    },
+    {
+      "file": "figures/hero.png",
+      "alt": "Viewshed from the Engineer Mountain summit over a hillshade, framed wide.",
+      "caption": "Hero."
+    }
+  ]
+}

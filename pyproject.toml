@@ -1,0 +1,43 @@
+[project]
+name = "purespatial-notebooks"
+version = "0.1.0"
+description = "Notebooks behind purespatial.com posts: open tools on open wildfire and terrain data, one folder per post."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+  "numpy>=2.0",
+  "pandas>=2.2",
+  "xarray>=2024.7",
+  "rasterio>=1.4",
+  "rioxarray>=0.17",
+  "shapely>=2.0",
+  "pyproj>=3.6",
+  "geopandas>=1.0",
+  "scipy>=1.13",
+  "matplotlib>=3.9",
+  "py3dep>=0.19",
+  "requests>=2.32",
+  "jupytext>=1.16",
+  "nbconvert>=7.16",
+  "nbclient>=0.10",
+  "ipykernel>=6.29",
+]
+
+[tool.poetry]
+packages = [{ include = "purespatial" }]
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=8.0"
+ruff = ">=0.5"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
