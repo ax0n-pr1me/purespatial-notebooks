@@ -41,6 +41,7 @@ from params import (
     NEAR_RADIUS_M,
     NEAR_RES_M,
     OBSERVER_HEIGHT_M,
+    PANORAMA,
     REGION,
     SLUG,
     SNAP_RADIUS_M,
@@ -202,19 +203,52 @@ near_png = ps.figures.viewshed_map(
 #
 # A skyline panorama cast from the observer: rays every 0.05 degrees of true azimuth, the DEM sampled
 # every 30 m out to 60 km, the same curvature and refraction as the viewshed, the eye 1.7 m above the 1 m crest.
-# Distance bands are drawn far
-# to near, so nearer ridges hide farther ones exactly as they do from the summit. Peaks rated visible
-# stand on the skyline; peaks rated hidden fall inside the ridge that hides them.
+# Distance bands are drawn far to near, so nearer ridges hide farther ones exactly as they do from the summit.
+# Peaks rated visible stand on the skyline; peaks rated hidden fall inside the ridge that hides them.
+#
+# Drawn as two sheets in the manner of a summit orientation table, east (north to east, east to south) and
+# west (south to west, west to north), two quarter-turns each, so every degree gets twice the width a
+# half-turn would and forty names stay legible at the width a post gives a figure.
 
 # %%
 sky = ps.panorama.compute_skyline(
     far_dem, OBS_LON, OBS_LAT, observer_height=OBSERVER_HEIGHT_M, max_distance=FAR_RADIUS_M, observer_elevation=summit_elev_near
 )
-pano_png = ps.panorama.render(
-    sky, OBS_LON, OBS_LAT, peaks, FIG / "panorama.png", style=STYLE,
-    title=f"The skyline from the {SUBJECT_NAME} summit, north to south over east (top) and south to north over west (bottom). 3DEP, 60 km.",
+farthest = peaks[peaks["predicted"] == "visible"].sort_values("distance_km").iloc[-1]
+about = [
+    f"Computed from the USGS 3DEP 1/3 arc-second elevation model to {FAR_RADIUS_M // 1000} km, with Earth curvature and standard refraction. Filled marks: named summits",
+    f"above {MIN_PEAK_ELEVATION_M:,} m the model rates in view ({n_vis} of {len(peaks)}; the farthest, {farthest['name']}, {farthest['distance_km']:.0f} km). Hollow marks: summits behind a nearer ridge.",
+    f"Nearer ridges are drawn darker. Vertical scale {PANORAMA.exaggeration:g}×.",
+]
+sheet_title = f"{SUBJECT_NAME}, {summit_elev_near:,.0f} m"
+east_png = ps.panorama.sheet(
+    sky, OBS_LON, OBS_LAT, peaks, FIG / "panorama-east.png", strips=((0, 90), (90, 180)), treatment="table",
+    title=sheet_title, lines=["The skyline from the summit, north to east, then east to south.", *about], style=PANORAMA,
+)
+west_png = ps.panorama.sheet(
+    sky, OBS_LON, OBS_LAT, peaks, FIG / "panorama-west.png", strips=((180, 270), (270, 360)), treatment="table",
+    title=sheet_title, lines=["The skyline from the summit, south to west, then west to north.", *about], style=PANORAMA,
 )
 print(f"skyline: {np.nanmin(sky.skyline):.1f} to {np.nanmax(sky.skyline):.1f} degrees; observer {sky.observer_elevation:.1f} m with eye height")
+
+# %% [markdown]
+# ### The skyline, slice by slice
+#
+# The Method figure. Forty distance slices from 0.7 to 60 km, each drawn as its own profile and hiding what
+# lies behind it, so slopes that face the summit fill with lines the way contours crowd on a steep face; the
+# heavy line is the skyline the model keeps. East to south, the quarter-turn with the most named summits.
+
+# %%
+n_slices = len(PANORAMA.line_edges_km) - 1
+method_png = ps.panorama.sheet(
+    sky, OBS_LON, OBS_LAT, peaks, FIG / "method-slices.png", strips=((90, 180),), treatment="lines",
+    title="The skyline, slice by slice",
+    lines=[
+        f"East to south from the summit. {n_slices} distance slices from {PANORAMA.line_edges_km[0]:g} to {PANORAMA.line_edges_km[-1]:g} km, each drawn as its own profile and hiding what lies behind it;",
+        "the heavy line is the skyline the model keeps. Filled marks: summits rated in view. Hollow marks: summits behind a nearer ridge.",
+    ],
+    style=PANORAMA,
+)
 
 # %% [markdown]
 # ### Hero candidates
@@ -231,8 +265,12 @@ candidates = {
     "relief-tight": ps.figures.hero_map(near_dem, near_vs, (OBS_LON, OBS_LAT), None, FIG / "hero-relief-tight.png", style=replace(STYLE, contours_m=50), width_m=3200, max_px=2400),
     # the wide surface without contours
     "relief-plain": ps.figures.hero_map(near_dem, near_vs, (OBS_LON, OBS_LAT), None, FIG / "hero-relief-plain.png", style=STYLE, width_m=6400, max_px=2400),
-    # the skyline as seen from the summit
-    "panorama": ps.panorama.render(sky, OBS_LON, OBS_LAT, peaks, FIG / "hero-panorama.png", style=STYLE),
+    # the skyline at dusk: the 96 degrees with the most summits in view, the title set in the sky
+    "panorama": ps.panorama.hero(
+        sky, OBS_LON, OBS_LAT, peaks, FIG / "hero-panorama.png", title=SUBJECT_NAME,
+        subtitle=f"{summit_elev_near:,.0f} m · the skyline from {{from_dir}} to {{to_dir}}, computed from USGS 3DEP to {FAR_RADIUS_M // 1000} km",
+        style=PANORAMA,
+    ),
     # the 60 km map, light and dark
     "map": ps.figures.hero_map(far_dem, far_vs, (OBS_LON, OBS_LAT), by_height, FIG / "hero-map.png", style=STYLE),
     "map-dark": ps.figures.hero_map(far_dem, far_vs, (OBS_LON, OBS_LAT), by_height, FIG / "hero-map-dark.png", style=replace(STYLE, dark=True, sightlines=True)),
@@ -240,36 +278,63 @@ candidates = {
 hero_png = FIG / "hero.png"
 shutil.copyfile(candidates[HERO], hero_png)
 print("hero:", HERO)
-[p.name for p in (far_png, near_png, pano_png, *candidates.values(), hero_png)]
+[p.name for p in (far_png, near_png, east_png, west_png, method_png, *candidates.values(), hero_png)]
 
 # %% [markdown]
 # ![Modeled visibility from the summit over 60 km at 30 m; filled marks are peaks the model rates visible, hollow marks hidden](figures/far-field.png)
 #
 # ![Near field on the 1 m lidar bare-earth DEM, 3 km](figures/near-field.png)
 #
-# ![The skyline from the summit, peaks rated visible on the ridge line and hidden peaks inside the ridges that hide them](figures/panorama.png)
+# ![The skyline east of the summit drawn as forty stacked distance slices](figures/method-slices.png)
+#
+# ![The skyline from the summit, north to east and east to south, as an orientation table](figures/panorama-east.png)
+#
+# ![The skyline from the summit, south to west and west to north, as an orientation table](figures/panorama-west.png)
 
 # %% [markdown]
 # ## Result
 
 # %%
+east_half = peaks["bearing_deg"] < 180
+n_vis_east = int((east_half & (peaks["predicted"] == "visible")).sum())
+n_vis_west = n_vis - n_vis_east
 figures = [
     {
+        "file": "figures/method-slices.png",
+        "section": "Method",
+        "alt": f"The skyline east to south from the {SUBJECT_NAME} summit drawn as {n_slices} stacked distance slices, fine profile lines fainter with distance, the skyline heavy on top, named summits marked in view or hidden.",
+        "caption": f"{n_slices} distance slices from {PANORAMA.line_edges_km[0]:g} to {FAR_RADIUS_M // 1000} km, each hiding what lies behind it; the heavy line is the skyline the model keeps.",
+    },
+    {
         "file": "figures/far-field.png",
+        "section": "Result",
         "alt": f"Viewshed from the {SUBJECT_NAME} summit over a hillshade of the San Juan Mountains, visible ground tinted green, named peaks marked visible or hidden.",
         "caption": f"Modeled visibility from the summit at {FAR_RES_M} m over {FAR_RADIUS_M // 1000} km: {n_vis} of {len(peaks)} named peaks rated visible.",
     },
     {
         "file": "figures/near-field.png",
+        "section": "Result",
         "alt": f"Near-field viewshed from the {SUBJECT_NAME} summit on the 1 m lidar bare-earth DEM, 3 km radius.",
         "caption": "The 1 m bare-earth model removes the trees, so near ridgelines below treeline may show as visible when they are not.",
     },
     {
-        "file": "figures/panorama.png",
-        "alt": f"Skyline panorama from the {SUBJECT_NAME} summit in two half-turns, ridges shaded by distance, named peaks marked visible on the skyline or hidden inside the ridges.",
-        "caption": f"The skyline the model computes from the summit; peaks rated visible stand on it, {len(peaks) - n_vis} rated hidden sit behind nearer ridges.",
+        "file": "figures/panorama-east.png",
+        "section": "Result",
+        "alt": f"The skyline from the {SUBJECT_NAME} summit, north to east and east to south, drawn as flat tonal ridges pale far and dark near, named summits with elevation and distance, a bearing scale under each strip.",
+        "caption": f"The eastern half of the view, north to east and east to south: {n_vis_east} of {int(east_half.sum())} named summits rated in view.",
     },
-    {"file": "figures/hero.png", "alt": f"Skyline panorama from the {SUBJECT_NAME} summit, ridges shaded by distance, named peaks marked.", "caption": "Hero."},
+    {
+        "file": "figures/panorama-west.png",
+        "section": "Result",
+        "alt": f"The skyline from the {SUBJECT_NAME} summit, south to west and west to north, drawn as flat tonal ridges pale far and dark near, named summits with elevation and distance, a bearing scale under each strip.",
+        "caption": f"The western half of the view, south to west and west to north: {n_vis_west} of {int((~east_half).sum())} named summits rated in view.",
+    },
+    {
+        "file": "figures/hero.png",
+        "section": "hero",
+        "alt": f"The skyline from the {SUBJECT_NAME} summit at dusk, black ridges against a fading glow, summits in view as luminous marks with their names, elevations, and distances; vertical scale {PANORAMA.hero_exaggeration:g} times.",
+        "caption": "Hero.",
+    },
 ]
 ps.result.write_result(
     HERE / "result.json",

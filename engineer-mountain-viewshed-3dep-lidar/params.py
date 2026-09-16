@@ -1,6 +1,7 @@
 """Constants for the Engineer Mountain viewshed. fetch.py and notebook.py import these; nothing else defines them."""
 
 from purespatial.figures import Style
+from purespatial.panorama import PanoramaStyle
 
 SLUG = "engineer-mountain-viewshed-3dep-lidar"
 STATE = "CO"
@@ -27,11 +28,13 @@ MAX_PEAKS = 40
 
 # Figure style: every knob is a field on Style (purespatial/figures.py); change them here and `make run`.
 STYLE = Style(label_top=20, hero_label_top=12)
+# The skyline sheets and the panorama hero take their knobs from PanoramaStyle (purespatial/panorama.py).
+PANORAMA = PanoramaStyle()
 
 # Hero image, all written to figures/, this one copied to hero.png:
 #   "relief"        the 1 m lidar surface with the whole 3 km viewshed disc, 50 m contours
 #   "relief-tight"  the summit close up at native 1 m pixels, 50 m contours
 #   "relief-plain"  the wide surface without contours
-#   "panorama"      the skyline as seen from the summit
+#   "panorama"      the skyline at dusk: the 96 degrees with the most summits in view, the title in the sky
 #   "map"           the 60 km viewshed map        "map-dark"  the same as a night map with sightlines
-HERO = "relief"
+HERO = "panorama"

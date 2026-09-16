@@ -28,6 +28,7 @@ Every folder here passes all four or it does not exist: open data (public, no ac
 - Public data only, no credentials, no paid services. If a source needs an account, say so and stop.
 - Open tools only: GDAL, Python packages on PyPI, USGS and NASA services.
 - Figures: PNG, at least 2000 px on the long side, one tint on a grey hillshade, named things labeled without overlap. The hero is 16:9. Every visual choice is a `Style` field (`purespatial/figures.py`), overridden per post in `params.py`; a taste change is a knob, not a code edit.
+- The skyline panorama (`purespatial/panorama.py`) has three treatments, chosen on the 2026-09-16 design board and not to be reopened per post: `table` sheets (east and west, two quarter-turns each) for Result, `lines` for Method, the `nocturne` hero. Its knobs are `PanoramaStyle`; the site's type (Charter, Avenir Next) and DESIGN.md tokens are its defaults. Design a figure for the width a post shows it at (about 700 px); forty labels never fit in one image.
 - Voice for anything that reaches the site (captions, the result sentence): first person, present tense, plain nouns, no exclamation marks, what happened then what to do next.
 
 ## Environment

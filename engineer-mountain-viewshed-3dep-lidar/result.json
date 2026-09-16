@@ -1,6 +1,6 @@
 {
   "schema": "purespatial-result/1",
-  "generated": "2026-09-15T21:22:16+00:00",
+  "generated": "2026-09-16T16:43:26+00:00",
   "slug": "engineer-mountain-viewshed-3dep-lidar",
   "subject": {
     "name": "Engineer Mountain",
@@ -482,23 +482,39 @@
   "findings": [],
   "figures": [
     {
+      "file": "figures/method-slices.png",
+      "section": "Method",
+      "alt": "The skyline east to south from the Engineer Mountain summit drawn as 40 stacked distance slices, fine profile lines fainter with distance, the skyline heavy on top, named summits marked in view or hidden.",
+      "caption": "40 distance slices from 0.7 to 60 km, each hiding what lies behind it; the heavy line is the skyline the model keeps."
+    },
+    {
       "file": "figures/far-field.png",
+      "section": "Result",
       "alt": "Viewshed from the Engineer Mountain summit over a hillshade of the San Juan Mountains, visible ground tinted green, named peaks marked visible or hidden.",
       "caption": "Modeled visibility from the summit at 30 m over 60 km: 27 of 40 named peaks rated visible."
     },
     {
       "file": "figures/near-field.png",
+      "section": "Result",
       "alt": "Near-field viewshed from the Engineer Mountain summit on the 1 m lidar bare-earth DEM, 3 km radius.",
       "caption": "The 1 m bare-earth model removes the trees, so near ridgelines below treeline may show as visible when they are not."
     },
     {
-      "file": "figures/panorama.png",
-      "alt": "Skyline panorama from the Engineer Mountain summit in two half-turns, ridges shaded by distance, named peaks marked visible on the skyline or hidden inside the ridges.",
-      "caption": "The skyline the model computes from the summit; peaks rated visible stand on it, 13 rated hidden sit behind nearer ridges."
+      "file": "figures/panorama-east.png",
+      "section": "Result",
+      "alt": "The skyline from the Engineer Mountain summit, north to east and east to south, drawn as flat tonal ridges pale far and dark near, named summits with elevation and distance, a bearing scale under each strip.",
+      "caption": "The eastern half of the view, north to east and east to south: 20 of 29 named summits rated in view."
+    },
+    {
+      "file": "figures/panorama-west.png",
+      "section": "Result",
+      "alt": "The skyline from the Engineer Mountain summit, south to west and west to north, drawn as flat tonal ridges pale far and dark near, named summits with elevation and distance, a bearing scale under each strip.",
+      "caption": "The western half of the view, south to west and west to north: 7 of 11 named summits rated in view."
     },
     {
       "file": "figures/hero.png",
-      "alt": "Skyline panorama from the Engineer Mountain summit, ridges shaded by distance, named peaks marked.",
+      "section": "hero",
+      "alt": "The skyline from the Engineer Mountain summit at dusk, black ridges against a fading glow, summits in view as luminous marks with their names, elevations, and distances; vertical scale 4 times.",
       "caption": "Hero."
     }
   ]
