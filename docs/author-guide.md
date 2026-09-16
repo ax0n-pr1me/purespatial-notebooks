@@ -30,7 +30,7 @@ A brief needs a named public place, fire, or route, and a check. "Make a pretty 
 Every run is cached: the DEMs and names file live in `data/`, so a re-run is the viewshed and the figures, under ten seconds. Three levels, cheapest first.
 
 1. **Say it.** "The labels are crowded", "the viewshed is too faint", "use a 100 km radius", "drop peaks under 4000 m". The agent changes a knob or a line, re-runs `make run`, and shows you the figure. This is the normal path.
-2. **Turn a knob yourself.** Every visual choice is a field on `Style` in `purespatial/figures.py`, overridden per post in `params.py`:
+2. **Turn a knob yourself.** Every visual choice is a field on `Style` in `purespatial/figures.py` (the maps) or `PanoramaStyle` in `purespatial/panorama.py` (the skyline sheets and the panorama hero), overridden per post in `params.py`:
    ```python
    from purespatial.figures import Style
    STYLE = Style(label_top=15, tint_alpha=0.85, hillshade_low=-0.6)
